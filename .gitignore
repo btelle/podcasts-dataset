@@ -1,0 +1,5 @@
+build_lists/sources
+config.py
+data
+*.py[cod]
+.DS_Store

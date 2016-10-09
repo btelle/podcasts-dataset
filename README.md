@@ -1,5 +1,7 @@
-## Podcast Lists
+## Podcasts Dataset
+Scripts to compile a large dataset of podcasts and episodes for analysis.
 
+## Podcast List Sources
 * http://www.allpodcasts.com/Tools/OPMLViewer.aspx?url=http%3a%2f%2fwww.digitalpodcast.com%2fopml%2fdigitalpodcast.opml
 * http://www.publicradiofan.com/podcasts.html
 * http://newtimeradio.com/
