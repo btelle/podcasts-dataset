@@ -54,9 +54,9 @@ CREATE TABLE IF NOT EXISTS `podcasts`.`episodes` (
   `show_id` VARCHAR(36) NOT NULL COMMENT '',
   `title` VARCHAR(255) NOT NULL COMMENT '',
   `link` VARCHAR(255) NOT NULL COMMENT '',
-  `guid` VARCHAR(255) NOT NULL COMMENT 'Theoretically a GUID, but not enforced by many platforms so not unique',
+  `guid` VARCHAR(255) NULL COMMENT 'Theoretically a GUID, but not enforced by many platforms so not unique',
   `subtitle` TEXT NULL COMMENT '',
-  `description` VARCHAR(45) NULL COMMENT '',
+  `description` TEXT NULL COMMENT '',
   `summary` TEXT NULL COMMENT '',
   `author` VARCHAR(255) NULL COMMENT '',
   `audio_url` VARCHAR(255) NOT NULL COMMENT '',
@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS `podcasts`.`episodes` (
   `audio_mime_type` VARCHAR(50) NOT NULL DEFAULT 'audio/mp3' COMMENT '',
   `category` VARCHAR(200) NULL COMMENT '',
   `explicit` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '',
-  `length` INT NOT NULL COMMENT '',
-  `pub_date` DATETIME NOT NULL COMMENT '',
+  `duration` INT NOT NULL COMMENT '',
+  `pub_date` DATETIME NULL COMMENT '',
   PRIMARY KEY (`id`),
   INDEX `show_fk_idx` (`show_id` ASC),
   UNIQUE INDEX `mp3_url_UNIQUE` (`audio_url` ASC),
@@ -114,7 +114,8 @@ SELECT
     shows.explicit as show_explicit,
     shows.image,
     shows.category as show_category,
-    shows.subcategory as show_subcategory
+    shows.subcategory as show_subcategory,
+    shows.feed_url as feed_url
 FROM episodes 
 INNER JOIN shows ON episodes.show_id=shows.id;
 

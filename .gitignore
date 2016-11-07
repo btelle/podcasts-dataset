@@ -1,5 +1,6 @@
 build_lists/sources
 config.py
 data
+checkpoint.log
 *.py[cod]
 .DS_Store
