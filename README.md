@@ -6,3 +6,5 @@ Scripts to compile a large dataset of podcasts and episodes for analysis.
 * http://www.publicradiofan.com/podcasts.html
 * http://newtimeradio.com/
 * https://rss.itunes.apple.com/us/?urlDesc=%2Fgenerator
+* https://www.podcastpedia.org/categories
+* http://www.godcast1000.com/

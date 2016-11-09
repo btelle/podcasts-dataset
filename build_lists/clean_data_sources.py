@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
-import re
+import re, requests
 
 def all_podcasts():
 	with open('sources/allpodcasts_com_directory.html', 'r') as fh:
@@ -30,6 +30,18 @@ def publicradiofan():
 			if match and len(match) > 0:
 				fh.write(match.strip()+"\n")
 
+def godcasts():
+	base_url = 'http://www.godcast1000.com/index.php?cat=&start={0}'
+	with open('../data/godcasts.txt', 'w') as fh:
+		for i in range(1, 1101, 50):
+			url = base_url.format(i)
+			contents = requests.get(url).text
+			
+			for match in re.findall('Get RSS: <a href="([^"]+)">', contents):
+				if match and len(match) > 0:
+					fh.write(match.strip()+"\n")
+
 all_podcasts()
 newtimeradio()
 publicradiofan()
+godcasts()
