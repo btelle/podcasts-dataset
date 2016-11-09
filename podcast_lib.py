@@ -241,7 +241,8 @@ class PodcastLib:
 		except (requests.exceptions.ConnectionError, 
 				requests.exceptions.TooManyRedirects, 
 				requests.exceptions.ReadTimeout,
-				requests.exceptions.InvalidSchema):
+				requests.exceptions.InvalidSchema,
+				UnicodeDecodeError):
 			print('Connection error')
 			return False
 	
