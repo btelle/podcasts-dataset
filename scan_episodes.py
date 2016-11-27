@@ -30,8 +30,9 @@ episodes_table = Table('episodes', metadata,
 	Column('audio_mime_type', String(50)),
 	Column('category', String(200)),
 	Column('explicit', Integer),
-	Column('duration', Integer),
-	Column('pub_date', DateTime())
+	Column('length', Integer),
+	Column('pub_date', DateTime()),
+	Column('keywords', String(800))
 )
 
 s = select([shows_table])
@@ -39,7 +40,7 @@ shows = db_conn.execute(s)
 
 for show in shows:
 	try:
-		obj = PodcastLib.process_feed(show[1], process_episodes=True)
+		obj = PodcastLib.process_feed(show[1].encode('utf-8'), process_episodes=True)
 		if obj:
 			for episode in obj['episodes']:
 				PodcastLib.save_to_db(db_conn, episodes_table, episode)

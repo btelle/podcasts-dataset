@@ -23,7 +23,8 @@ class PodcastLib:
 		'description',
 		'summary',
 		'author',
-		'category'
+		'category',
+		'keywords'
 	]
 
 	tmp_dir = '/tmp/podcasts/feeds/'
@@ -86,19 +87,22 @@ class PodcastLib:
 					except (ValueError, TypeError):
 						duration = None
 
-				obj['duration'] = duration
+				obj['length'] = duration
 			
-			if 'duration' not in obj:
-				obj['duration'] = None
+			if 'length' not in obj:
+				obj['length'] = None
 			
-			if type(obj['duration']) is str and ':' in obj['duration']:
-				obj['duration'] = None
+			if type(obj['length']) is str and ':' in obj['length']:
+				obj['length'] = None
 			
 			if 'description' in obj:
 				obj['description'] = obj['description'][:255]
 			
 			if 'author' in obj:
 				obj['author'] = obj['author'][:255]
+			
+			if 'keywords' in obj:
+				keywords = ','.join([r.strip() for r in obj['keywords'].split(',')])
 			
 			if 'audio_file_size' in obj:
 				if type(obj['audio_file_size']) is str:
@@ -109,7 +113,6 @@ class PodcastLib:
 				
 				if obj['audio_file_size'] and int(obj['audio_file_size']) < 0:
 					obj['audio_file_size'] = ''
-			
 		return obj
 	
 	@staticmethod
