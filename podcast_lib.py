@@ -44,7 +44,6 @@ class PodcastLib:
 		obj = {}
 		for child in node:
 			tag = child.tag.lower().replace(PodcastLib.dtd, '').split('}')[-1]
-			print(tag)
 			if tag in PodcastLib.episode_fields:
 				try:
 					obj[tag] = child.attrib if (child.attrib and type(child.attrib) == str) else child.text.strip() if child.text else ''	
@@ -54,7 +53,7 @@ class PodcastLib:
 				if 'url' in child.attrib:
 					obj['audio_url'] = child.attrib['url']
 				if 'length' in child.attrib:
-					obj['audio_file_size'] = child.attrib['length']
+					obj['audio_file_size'] = child.attrib['length'].replace(',', '')
 				if 'type' in child.attrib:
 					obj['audio_mime_type'] = child.attrib['type']
 			
@@ -72,16 +71,44 @@ class PodcastLib:
 				obj['pub_date'] = dt
 		
 			elif tag == 'duration': 
-				if ':' in child.text:
+				if child.text and ':' in child.text:
 					lengths = child.text.split(':')[::-1]
 					duration = 0
 			
 					for i in range(0, len(lengths)):
-						duration += max((i*60), 1) * int(lengths[i])
+						try:
+							duration += max((i*60), 1) * int(float(lengths[i]))
+						except (ValueError, TypeError):
+							pass
 				else:
-					duration = int(child.text)
+					try:
+						duration = int(child.text)
+					except (ValueError, TypeError):
+						duration = None
 
 				obj['duration'] = duration
+			
+			if 'duration' not in obj:
+				obj['duration'] = None
+			
+			if type(obj['duration']) is str and ':' in obj['duration']:
+				obj['duration'] = None
+			
+			if 'description' in obj:
+				obj['description'] = obj['description'][:255]
+			
+			if 'author' in obj:
+				obj['author'] = obj['author'][:255]
+			
+			if 'audio_file_size' in obj:
+				if type(obj['audio_file_size']) is str:
+					try:
+						int(obj['audio_file_size'])
+					except ValueError:
+						obj['audio_file_size'] = ''
+				
+				if obj['audio_file_size'] and int(obj['audio_file_size']) < 0:
+					obj['audio_file_size'] = ''
 			
 		return obj
 	
@@ -169,7 +196,6 @@ class PodcastLib:
 			obj['image'] = obj['image'][0:255]
 	
 		if 'image' in obj and type(obj['image']) != str:
-			print(obj['image'])
 			if type(obj['image']) == dict and 'href' in obj['image']:
 				obj['image'] = obj['image']['href']
 			else:
@@ -256,9 +282,9 @@ class PodcastLib:
 					for i in range(0, len(obj['episodes'])):
 						obj['episodes'][i]['show_id'] = obj['id']
 						try:
-							hash = hashlib.sha256(obj['episodes'][i]['audio_url'].lower() + str(obj['episodes'][i]['audio_file_size'])).hexdigest()
+							hash = hashlib.sha256(obj['episodes'][i]['audio_url'].decode('utf-8').lower() + obj['episodes'][i]['audio_file_size'].decode('UTF-8')).hexdigest()
 							id = str(uuid.uuid3(uuid.NAMESPACE_URL, hash))
-						except KeyError:
+						except (KeyError, UnicodeEncodeError):
 							id = str(uuid.uuid4())
 						obj['episodes'][i]['id'] = id
 				
