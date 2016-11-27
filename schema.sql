@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `podcasts`.`episodes` (
   `explicit` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '',
   `length` INT NOT NULL COMMENT '',
   `pub_date` DATETIME NOT NULL COMMENT '',
+  `keywords` VARCHAR(800) NULL COMMENT '',
   PRIMARY KEY (`id`),
   INDEX `show_fk_idx` (`show_id` ASC),
   UNIQUE INDEX `mp3_url_UNIQUE` (`audio_url` ASC),
@@ -73,23 +74,6 @@ CREATE TABLE IF NOT EXISTS `podcasts`.`episodes` (
     FOREIGN KEY (`show_id`)
     REFERENCES `podcasts`.`shows` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `podcasts`.`keywords`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `podcasts`.`keywords` ;
-
-CREATE TABLE IF NOT EXISTS `podcasts`.`keywords` (
-  `episode_id` VARCHAR(36) NOT NULL COMMENT '',
-  `keyword` VARCHAR(255) NOT NULL COMMENT '',
-  PRIMARY KEY (`episode_id`, `keyword`)  COMMENT '',
-  CONSTRAINT `episode_fk`
-    FOREIGN KEY (`episode_id`)
-    REFERENCES `podcasts`.`episodes` (`id`)
-    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
