@@ -107,12 +107,11 @@ class PodcastLib:
 			if 'audio_file_size' in obj:
 				if type(obj['audio_file_size']) is str:
 					try:
-						int(obj['audio_file_size'])
+						if obj['audio_file_size'] and int(obj['audio_file_size']) < 0:
+							obj['audio_file_size'] = ''
 					except ValueError:
 						obj['audio_file_size'] = ''
 				
-				if obj['audio_file_size'] and int(obj['audio_file_size']) < 0:
-					obj['audio_file_size'] = ''
 		return obj
 	
 	@staticmethod
